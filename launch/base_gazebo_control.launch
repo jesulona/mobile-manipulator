@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<launch>
+  <param name="robot_description" textfile="$(find mobile_manipulator_body)/urdf/robot_base.urdf" />
+  <include file="$(find gazebo_ros)/launch/empty_world.launch"/>
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model robot_base" />
+  <rosparam command="load" file="$(find mobile_manipulator_body)/config/control.yaml" />
+  <node name="base_controller_spawner" pkg="controller_manager" type="spawner" args="robot_base_joint_publisher robot_base_velocity_controller"/>
+
+<node pkg="rqt_robot_steering" type="rqt_robot_steering" name="robot_base_teleop">
+  <param name="default_topic" type="str" value="/robot_base_velocity_controller/cmd_vel"/>
+  <param name="default_vx_max" type="double" value="0.8" />
+  <param name="default_vx_min" type="double" value="-0.8" />
+  <param name="default_vw_max" type="double" value="1.5" />
+  <param name="default_vw_min" type="double" value="-1.5" />
+</node>
+
+</launch>
